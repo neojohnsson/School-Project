@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 
+import { MemoryStorage } from '../../../testing/memory-storage';
+import { AuthService } from '../../services/auth.service';
 import { Login } from './login';
 
 describe('Login', () => {
@@ -9,6 +11,7 @@ describe('Login', () => {
   let router: Router;
 
   beforeEach(async () => {
+    vi.stubGlobal('localStorage', new MemoryStorage()); // start logged out
     await TestBed.configureTestingModule({
       imports: [Login],
       providers: [provideRouter([])],
@@ -29,21 +32,34 @@ describe('Login', () => {
     const buttons = Array.from(page.querySelectorAll('button'));
     buttons.find((button) => button.textContent?.trim() === text)!.click();
   };
+  const error = () => page.querySelector('.message')?.textContent?.trim();
 
   it('shows an error when the fields are empty', async () => {
     click('Log in');
     await fixture.whenStable();
 
-    expect(page.querySelector('.error')?.textContent).toContain('Please fill in');
+    expect(error()).toContain('Please fill in');
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
-  it('opens the collection after logging in', async () => {
-    type('username', 'ash');
-    type('password', 'pikachu');
+  it('shows an error for a wrong password', async () => {
+    type('username', 'user');
+    type('password', 'wrong');
     click('Log in');
     await fixture.whenStable();
 
+    expect(error()).toBe('Wrong username or password.');
+    expect(TestBed.inject(AuthService).isLoggedIn()).toBe(false);
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
+
+  it('logs in with the right username and password', async () => {
+    type('username', 'user');
+    type('password', 'password');
+    click('Log in');
+    await fixture.whenStable();
+
+    expect(TestBed.inject(AuthService).isLoggedIn()).toBe(true);
     expect(router.navigate).toHaveBeenCalledWith(['/home']);
   });
 

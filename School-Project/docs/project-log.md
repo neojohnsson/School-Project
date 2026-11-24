@@ -306,6 +306,91 @@ Some parts were made **shared**, so all pages use the same code.
 
   In one run, Butterfree came out of the pack: the counter went from 12 to 13 / 151 and its empty spot became a card with a NEW tag.
 
+### Step 8 – Only logged-in players can open packs
+
+We wanted the Open Packs page to be **locked until you log in**, with one built-in account:
+
+- **Username:** `user`
+- **Password:** `password`
+  - in the code it is only stored as `cGFzc3dvcmQ=`, which is "password" in **base64**
+  - base64 is a way of writing text with other letters; `btoa()` in JavaScript makes it
+
+#### How it works
+
+| File | What it does |
+|---|---|
+| `src/app/services/auth.service.ts` | Checks the login and remembers if you are logged in |
+| `src/app/guards/auth.guard.ts` | Blocks the Open Packs page when you are logged out |
+| `src/app/app.routes.ts` | `canActivate: [authGuard]` added to the `open-packs` route |
+| `src/app/pages/login/login.ts` | Uses the AuthService to check the username and password |
+| `src/app/components/app-header/` | The "A" circle now really logs you out |
+
+1. **Logging in:**
+   - the AuthService turns the typed password into base64 with `btoa()` and compares it with `cGFzc3dvcmQ=`
+   - it also checks that the username is `user`
+   - right → you are logged in and go to the Collection page; wrong → *"Wrong username or password."*
+2. **Remembering it:** "logged in" is saved in the browser's localStorage (`packvault-logged-in`), so a reload does not log you out.
+3. **The guard:**
+   - a *route guard* runs before Angular opens a page
+   - for `/open-packs` it asks the AuthService: logged in → the page opens; logged out → you are sent to `/login`
+4. **Logging out:** clicking the "A" circle logs you out and opens the login page.
+5. **"Create account"** shows *"Creating new accounts isn't possible yet."*, because there is only one built-in account.
+
+The Collection page is still open for everyone; only opening packs needs a login.
+
+#### Testing
+
+- 7 new tests (25 in total, all passing). They check:
+  - right and wrong passwords
+  - that the login is remembered
+  - that the guard sends you to `/login` when logged out and lets you in when logged in
+- In a real browser:
+  - logged out → `/open-packs` sent us to `/login`
+  - a wrong password showed the error
+  - the right one logged us in, and Open Packs worked, also after a reload
+  - after clicking "A", Open Packs was locked again
+
+#### Good to know (for the report)
+
+Base64 is **not encryption**. Anyone can turn `cGFzc3dvcmQ=` back into "password" in one second, and the check runs in the browser, where anyone can read the code or set `packvault-logged-in` to `true`.
+That is fine for a school project. A real app checks the password on a **server** and stores it as a **hash** (for example with bcrypt), which cannot be turned back into the password.
+
+### Step 9 – "Clear saved data" instead of "Create account"
+
+- **Removed the "Create account" button.** There is only one built-in account, so it could not do anything.
+- **Added a "Clear saved data" button** in the same place on the Login page. It:
+  1. logs you out and puts the collection back to the 12 starter cards in the app's memory (`AuthService.logOut()` and the new `CollectionService.reset()`)
+  2. deletes everything the app saved in the browser with `localStorage.clear()`, which removes `packvault-collection` and `packvault-logged-in`
+  3. shows *"Saved data cleared. Your collection is back to the starter cards."*
+
+  Step 1 is needed because the app also keeps the data in memory (signals). Only clearing localStorage would leave the old cards on screen until a reload.
+- Handy before a demo: the app starts again like the first visit.
+- The small text under the fields is now called `message` instead of `error`, because it is not always an error.
+- **Testing:**
+  - 1 new test (26 in total, all passing)
+  - in a real browser: after opening a pack, both saved keys were there; after "Clear saved data" localStorage was empty, the collection showed 12 / 151 and Open Packs was locked again
+
+### Step 10 – Clear "Log in" / "Log out" buttons in the header
+
+The "A" circle that secretly logged you out felt weird, so the header was changed (approved before the change):
+
+```
+Logged in:   [Open packs] [Collection]           Clear saved data   [Log out]
+Logged out:  [Open packs] [Collection]                              [Log in]
+```
+
+- **Log out** (outlined button): logs you out and opens the Login page.
+- **Log in** (black button): opens the Login page. Only seen on the Collection page, because Open Packs already sends logged-out players to Login.
+- **Clear saved data** moved from the Login page to the header and only shows when you are logged in.
+  - It is small grey text, so it is not clicked by accident.
+  - It does the same as before (deletes the cards and the login, collection back to 12 starter cards), then opens the Login page.
+- The Login page now only has the **Log in** button.
+- The header uses `@if (isLoggedIn())` to choose which buttons to show, so it changes by itself when you log in or out.
+- **Files:** `components/app-header/` (html, ts, css + a new test file) and `pages/login/` (button removed).
+- **Testing:**
+  - 4 new header tests (29 in total, all passing)
+  - in a real browser: logged out showed "Log in"; logged in showed "Clear saved data" + "Log out" on both Collection and Open Packs; "Log out" went to the Login page; the phone layout had no sideways scrolling
+
 ---
 
 ## 4. Problems we ran into and how we solved them

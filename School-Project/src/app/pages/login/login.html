@@ -4,7 +4,7 @@
     <!-- #username and #password give the inputs a name, so we can send their values -->
     <form class="login" (submit)="logIn($event, username.value, password.value)">
       <h1 class="display">Welcome back</h1>
-
+      
       <div class="fields">
         <div class="field">
           <label class="label" for="username">Username</label>
@@ -14,7 +14,7 @@
               id="username"
               name="username"
               autocomplete="username"
-              placeholder="e.g. ash_ketchum"
+              placeholder="The username is: user"
             />
           </div>
         </div>
@@ -28,7 +28,7 @@
               name="password"
               [type]="showPassword() ? 'text' : 'password'"
               autocomplete="current-password"
-              placeholder="Enter your password"
+              placeholder="The password is: password"
             />
             <button type="button" class="toggle" (click)="togglePassword()">
               {{ showPassword() ? 'Hide' : 'Show' }}
@@ -36,20 +36,13 @@
           </div>
         </div>
 
-        @if (error()) {
-          <p class="error" role="alert">{{ error() }}</p>
+        @if (message()) {
+          <p class="message" role="status">{{ message() }}</p>
         }
       </div>
 
       <div class="actions">
         <button type="submit" class="btn btn-primary">Log in</button>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="createAccount(username.value, password.value)"
-        >
-          Create account
-        </button>
       </div>
     </form>
   </section>

@@ -1,9 +1,17 @@
 <header class="header">
+  <!-- Left: the pages. routerLinkActive adds the "active" class (black) to the page you are on -->
   <nav class="nav">
-    <!-- routerLinkActive adds the "active" class (black button) to the page you are on -->
     <a class="nav-item" routerLink="/open-packs" routerLinkActive="active">Open packs</a>
     <a class="nav-item" routerLink="/home" routerLinkActive="active">Collection</a>
-    <!-- The profile circle takes you back to the login page (= log out) -->
-    <a class="avatar" routerLink="/login" title="Log out" aria-label="Log out">A</a>
   </nav>
+
+  <!-- Right: account buttons, depending on if you are logged in -->
+  <div class="account">
+    @if (isLoggedIn()) {
+      <button type="button" class="text-button" (click)="clearSavedData()">Clear saved data</button>
+      <button type="button" class="nav-item" (click)="logOut()">Log out</button>
+    } @else {
+      <a class="nav-item active" routerLink="/login">Log in</a>
+    }
+  </div>
 </header>

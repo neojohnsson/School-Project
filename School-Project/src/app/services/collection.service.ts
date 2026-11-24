@@ -52,6 +52,11 @@ export class CollectionService {
     saveCollection(next);
     return cards;
   }
+
+  /** Back to the 12 starter cards (used by the "Clear saved data" button). */
+  reset(): void {
+    this.owned.set({ ...STARTER_COLLECTION });
+  }
 }
 
 function loadCollection(): Record<number, Owned> {

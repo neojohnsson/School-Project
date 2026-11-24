@@ -1,11 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 /**
- * Login page (page 1 in Figma): username, password, "Log in" and "Create account".
+ * Login page (page 1 in Figma): username, password and "Log in".
  *
- * NOTE: there is no backend yet, so we can't really check passwords or save accounts.
- * For now both buttons only check that the fields are filled in, then open the collection.
+ * NOTE: there is no backend yet, so there is only one built-in account (see AuthService).
  * Later, call your backend here (for example with Angular's HttpClient).
  */
 @Component({
@@ -16,9 +16,11 @@ import { Router } from '@angular/router';
 export class Login {
   /** The Router lets us change page from code (instead of a link). */
   private readonly router = inject(Router);
+  private readonly auth = inject(AuthService);
 
   protected readonly showPassword = signal(false);
-  protected readonly error = signal('');
+  /** The small text under the fields, for example "Wrong username or password." */
+  protected readonly message = signal('');
 
   protected togglePassword(): void {
     this.showPassword.update((shown) => !shown);
@@ -27,20 +29,16 @@ export class Login {
   /** "Log in" button (also runs when you press Enter in a field). */
   protected logIn(event: Event, username: string, password: string): void {
     event.preventDefault(); // stop the browser from reloading the page on submit
-    this.continue(username, password);
-  }
 
-  /** "Create account" button. */
-  protected createAccount(username: string, password: string): void {
-    this.continue(username, password);
-  }
-
-  private continue(username: string, password: string): void {
     if (!username.trim() || !password) {
-      this.error.set('Please fill in your username and password.');
+      this.message.set('Please fill in your username and password.');
       return;
     }
-    this.error.set('');
+    if (!this.auth.logIn(username, password)) {
+      this.message.set('Wrong username or password.');
+      return;
+    }
+    this.message.set('');
     this.router.navigate(['/home']);
   }
 }
