@@ -1,0 +1,126 @@
+/* :host is the <app-pokemon-card> tag itself */
+:host {
+  display: block;
+}
+
+/* White card with a thin border and a very soft shadow (from Figma: padding 8, radius 14) */
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgb(20 20 20 / 6%);
+}
+
+/* Square grey area that holds the Pokémon image */
+.art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  background: var(--bg-subtle);
+  border-radius: 10px;
+}
+
+.art img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+}
+
+/* Small tag in the top-left corner: outlined (×3) or black (NEW) */
+.tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-surface);
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+.tag-new {
+  border-color: var(--bg-inverse);
+  background: var(--bg-inverse);
+  color: var(--text-inverse);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 6px 4px;
+}
+
+/* Puts one text on the left and one on the right */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.name {
+  margin: 0;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.muted,
+.number {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--text-secondary);
+}
+
+.number {
+  color: var(--text-tertiary);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 6px 2px;
+  border-top: 1px solid var(--border);
+}
+
+.rarity {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pips {
+  display: flex;
+  gap: 2px;
+}
+
+/* A 7×7 diamond: a square with its corners cut off by clip-path */
+.pip {
+  width: 7px;
+  height: 7px;
+  background: var(--border);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+
+.pip.on {
+  background: var(--text-primary);
+}
+
+.set {
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+}

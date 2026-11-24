@@ -1,1 +1,99 @@
-/* You can add global styles to this file, and also import other style files */
+/*
+ * Global styles: used by every page.
+ *
+ * 1. Design tokens = the colors from the Figma file ("Tokens" collection).
+ *    Always use var(--name) instead of typing a hex color, so the whole app
+ *    stays consistent and a color can be changed in one place.
+ */
+:root {
+  --bg-page: #f3f4f2; /* page background (off-white) */
+  --bg-surface: #ffffff; /* cards */
+  --bg-subtle: #e8eae6; /* card image area, avatar, hover */
+  --bg-inverse: #151515; /* black buttons and tags */
+  --border: #dcdfda; /* thin lines and card borders */
+  --text-primary: #151515;
+  --text-secondary: #5e625e;
+  --text-tertiary: #9a9f9a; /* placeholders, small hints */
+  --text-inverse: #ffffff; /* text on black */
+  --font: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* 2. Small reset so all browsers start from the same place */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 22px;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+/* 3. Big page title: "Welcome back", "My collection", "Open a pack" ... */
+.display {
+  margin: 0;
+  font-size: 64px;
+  line-height: 68px;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+/* 4. Buttons: <button class="btn btn-primary"> (black) or "btn btn-secondary" (outlined) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 24px;
+  border: 1px solid var(--text-primary);
+  border-radius: 10px;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.btn-primary {
+  background: var(--bg-inverse);
+  color: var(--text-inverse);
+}
+
+.btn-primary:hover {
+  background: #2e2e2e;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-subtle);
+}
+
+/* Smaller title on phones */
+@media (max-width: 700px) {
+  .display {
+    font-size: 44px;
+    line-height: 48px;
+  }
+}

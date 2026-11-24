@@ -1,0 +1,37 @@
+<article class="card">
+  <!-- Image area with an optional NEW or ×3 tag in the corner -->
+  <div class="art">
+    <img [src]="imageUrl()" [alt]="card().name" loading="lazy" />
+
+    @if (card().isNew) {
+      <span class="tag tag-new">NEW</span>
+    } @else if (card().copies > 1) {
+      <span class="tag">×{{ card().copies }}</span>
+    }
+  </div>
+
+  <!-- Name + HP, then type + number -->
+  <div class="info">
+    <div class="row">
+      <h3 class="name">{{ card().name }}</h3>
+      <span class="muted">{{ card().hp }} HP</span>
+    </div>
+    <div class="row">
+      <span class="muted">{{ card().type }}</span>
+      <span class="number">{{ number() }}</span>
+    </div>
+  </div>
+
+  <!-- Rarity diamonds + set name -->
+  <footer class="footer">
+    <span class="rarity muted">
+      <span class="pips" aria-hidden="true">
+        @for (pip of pips; track pip) {
+          <span class="pip" [class.on]="pip <= rarityLevel()"></span>
+        }
+      </span>
+      {{ card().rarity }}
+    </span>
+    <span class="set">S1</span>
+  </footer>
+</article>

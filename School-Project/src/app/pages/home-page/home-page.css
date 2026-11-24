@@ -1,0 +1,303 @@
+/*
+ * Collection page. All sizes come from the Figma frame (1440px wide):
+ * 92px left/right padding, so the content is 1256px wide.
+ */
+.page {
+  box-sizing: content-box; /* the 1256px max-width does not include the padding */
+  max-width: 1256px;
+  margin: 0 auto;
+  padding: 42px 92px 72px;
+}
+
+/* ---------- 1. Header ---------- */
+.header {
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-item {
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid var(--text-primary);
+  border-radius: 9px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: background-color 0.15s;
+}
+
+.nav-item:hover {
+  background: var(--bg-subtle);
+}
+
+/* routerLinkActive adds the "active" class to the link of the page you are on */
+.nav-item.active {
+  background: var(--bg-inverse);
+  color: var(--text-inverse);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--bg-subtle);
+  font-weight: 500;
+}
+
+/* ---------- 2. Title + progress ---------- */
+.intro {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  margin-top: 88px;
+}
+
+.lead {
+  margin: 20px 0 0;
+  font-size: 17px;
+  line-height: 26px;
+}
+
+.progress {
+  width: 260px;
+  padding-bottom: 4px;
+}
+
+.progress-value {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 12px;
+  color: var(--text-secondary);
+}
+
+.progress-count {
+  font-size: 32px;
+  line-height: 38px;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.track {
+  height: 2px;
+  background: var(--border);
+}
+
+.bar {
+  height: 100%;
+  background: var(--text-primary);
+}
+
+/* ---------- 3. Toolbar ---------- */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px 24px;
+  margin-top: 56px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 28px;
+}
+
+.tab {
+  margin-bottom: -1px; /* so the black underline sits on top of the grey line */
+  padding: 0 0 14px;
+  border: 0;
+  border-bottom: 1.5px solid transparent;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.tab:hover,
+.tab.active {
+  color: var(--text-primary);
+}
+
+.tab.active {
+  border-bottom-color: var(--text-primary);
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding-bottom: 12px;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 220px;
+  color: var(--text-secondary);
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  color: var(--text-primary);
+}
+
+.search input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* A thin underline appears while you type (like the inputs on the login page) */
+.search:focus-within {
+  box-shadow: 0 1px 0 var(--text-primary);
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+}
+
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap; /* keep "Sort by" on one line */
+  color: var(--text-tertiary);
+}
+
+.select {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary);
+}
+
+/* Remove the browser's own select style and put our chevron icon on the right */
+.select select {
+  appearance: none;
+  padding: 0 24px 0 0;
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.select svg {
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+}
+
+/* ---------- 4. Card grid ---------- */
+/* auto-fill makes as many 208px+ columns as fit: 5 on a laptop, 2 on a phone */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(208px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.empty-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  aspect-ratio: 232 / 325;
+  border: 1.5px dashed var(--border);
+  border-radius: 14px;
+  color: var(--text-tertiary);
+}
+
+.empty-number {
+  font-size: 32px;
+  line-height: 38px;
+  letter-spacing: -0.02em;
+}
+
+.empty-caption,
+.count {
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 48px 0;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+/* ---------- 5. Load more ---------- */
+.load-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.count {
+  margin: 0;
+  color: var(--text-tertiary);
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 700px) {
+  .page {
+    padding: 24px 16px 48px;
+  }
+
+  .intro {
+    margin-top: 48px;
+  }
+
+  /* Tabs stay on one line; swipe sideways to see the rest */
+  .tabs {
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tab {
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+
+  .tools {
+    width: 100%;
+  }
+
+  .search {
+    flex: 1;
+    width: auto;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+}
