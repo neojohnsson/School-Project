@@ -43,14 +43,14 @@ describe('AppHeader', () => {
   });
 
   it('shows "Clear saved data" and "Log out" when you are logged in', async () => {
-    auth.logIn('user', 'password');
+    auth.logIn('ash', 'PasSword123!');
     await fixture.whenStable();
 
     expect(accountButtons()).toEqual(['Clear saved data', 'Log out']);
   });
 
   it('logs out and goes to the login page', async () => {
-    auth.logIn('user', 'password');
+    auth.logIn('ash', 'PasSword123!');
     await fixture.whenStable();
 
     click('Log out');
@@ -61,7 +61,7 @@ describe('AppHeader', () => {
 
   it('clears the saved cards and the login', async () => {
     const collection = TestBed.inject(CollectionService);
-    auth.logIn('user', 'password');
+    auth.logIn('ash', 'PasSword123!');
     collection.addCards([CARD_SET.find((card) => card.name === 'Dragonite')!]);
     expect(collection.ownedCount()).toBe(13);
     await fixture.whenStable();

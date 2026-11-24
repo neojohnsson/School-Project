@@ -16,6 +16,7 @@
   --text-tertiary: #9a9f9a; /* placeholders, small hints */
   --text-inverse: #ffffff; /* text on black */
   --font: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --footer-height: 42px; /* the footer at the bottom of every page */
 }
 
 /* 2. Small reset so all browsers start from the same place */
@@ -106,7 +107,7 @@ select {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--footer-height)); /* the full screen, minus the footer */
   padding: 12px;
 }
 

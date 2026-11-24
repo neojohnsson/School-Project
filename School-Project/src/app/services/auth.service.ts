@@ -1,9 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-
-/** The only account for now. */
-const USERNAME = 'user';
-/** The password in base64 ("cGFzc3dvcmQ=" is "password"), so it is not written as plain text. */
-const PASSWORD_BASE64 = 'cGFzc3dvcmQ=';
+import { passwordProblem } from '../utils/password-check';
 
 /** The name we save "logged in" under in the browser. */
 const STORAGE_KEY = 'packvault-logged-in';
@@ -11,19 +7,22 @@ const STORAGE_KEY = 'packvault-logged-in';
 /**
  * Remembers if the player is logged in.
  * Like the CollectionService, there is only ONE of it for the whole app (providedIn: 'root').
+ *
+ * There is no backend, so any username works, as long as the password follows the rule
+ * from Assignment 2 (see utils/password-check.ts).
  */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   /** true = logged in. Saved in the browser, so a reload does not log you out. */
   readonly isLoggedIn = signal(loadLoggedIn());
 
-  /** Checks the username and password. Returns true if they are correct. */
+  /** Logs in if there is a username and the password is valid. Returns true if it worked. */
   logIn(username: string, password: string): boolean {
-    const correct = username.trim() === USERNAME && toBase64(password) === PASSWORD_BASE64;
-    if (correct) {
+    const ok = username.trim() !== '' && passwordProblem(password) === null;
+    if (ok) {
       this.setLoggedIn(true);
     }
-    return correct;
+    return ok;
   }
 
   logOut(): void {
@@ -37,15 +36,6 @@ export class AuthService {
     } catch {
       // If saving fails you stay logged in until you reload the page.
     }
-  }
-}
-
-/** btoa() turns text into base64. It fails on some special characters (like emoji). */
-function toBase64(text: string): string {
-  try {
-    return btoa(text);
-  } catch {
-    return '';
   }
 }
 

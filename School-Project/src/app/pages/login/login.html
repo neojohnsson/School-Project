@@ -1,4 +1,5 @@
-<div class="split">
+<!-- <main> = the main content of the page (HTML5) -->
+<main class="split">
   <!-- Left half: the form -->
   <section class="split-content content">
     <!-- #username and #password give the inputs a name, so we can send their values -->
@@ -14,7 +15,7 @@
               id="username"
               name="username"
               autocomplete="username"
-              placeholder="The username is: user"
+              placeholder="e.g. ash_ketchum"
             />
           </div>
         </div>
@@ -28,7 +29,7 @@
               name="password"
               [type]="showPassword() ? 'text' : 'password'"
               autocomplete="current-password"
-              placeholder="The password is: password"
+              placeholder="The password is: PasSword123!"
             />
             <button type="button" class="toggle" (click)="togglePassword()">
               {{ showPassword() ? 'Hide' : 'Show' }}
@@ -51,4 +52,4 @@
   <div class="split-panel hero">
     <img src="images/hero-pikachu.png" alt="" />
   </div>
-</div>
+</main>

@@ -15,19 +15,19 @@ describe('AuthService', () => {
     expect(auth.isLoggedIn()).toBe(false);
   });
 
-  it('logs in with "user" and "password"', () => {
-    expect(auth.logIn('user', 'password')).toBe(true);
+  it('logs in with any username and a valid password', () => {
+    expect(auth.logIn('ash', 'PasSword123!')).toBe(true);
     expect(auth.isLoggedIn()).toBe(true);
   });
 
-  it('does not log in with a wrong username or password', () => {
-    expect(auth.logIn('user', 'Password')).toBe(false);
-    expect(auth.logIn('admin', 'password')).toBe(false);
+  it('does not log in with an invalid password or no username', () => {
+    expect(auth.logIn('ash', 'password')).toBe(false);
+    expect(auth.logIn('   ', 'PasSword123!')).toBe(false);
     expect(auth.isLoggedIn()).toBe(false);
   });
 
   it('remembers the login in the browser and can log out', () => {
-    auth.logIn('user', 'password');
+    auth.logIn('ash', 'PasSword123!');
     expect(localStorage.getItem('packvault-logged-in')).toBe('true');
 
     auth.logOut();

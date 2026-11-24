@@ -1,8 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { AppHeader } from '../../components/app-header/app-header';
 import { PokemonCard } from '../../components/pokemon-card/pokemon-card';
-import { SET_SIZE } from '../../data/card-set';
-import { CollectionSlot, PokemonType, formatNumber } from '../../models/card';
+import { CARD_SET, SET_SIZE } from '../../data/card-set';
+import { CollectionSlot, PokemonType, RARITY_LEVEL, Rarity, formatNumber } from '../../models/card';
 import { CollectionService } from '../../services/collection.service';
 
 type TypeFilter = 'All' | PokemonType;
@@ -51,6 +51,15 @@ export class HomePage {
   // computed() recalculates only when a signal it reads changes.
   protected readonly ownedCount = this.collection.ownedCount;
   protected readonly progress = computed(() => (this.ownedCount() / this.setSize) * 100);
+
+  /** For the table: per rarity, how many cards you own and how many can come out of packs. */
+  protected readonly rarityRows = computed(() =>
+    (Object.keys(RARITY_LEVEL) as Rarity[]).map((rarity) => ({
+      rarity,
+      owned: this.slots().filter((slot) => slot.card?.rarity === rarity).length,
+      total: CARD_SET.filter((card) => card.rarity === rarity).length,
+    })),
+  );
 
   /** The slots that match the active tab + search, in the chosen order. */
   protected readonly filteredSlots = computed(() => {

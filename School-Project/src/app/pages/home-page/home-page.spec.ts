@@ -34,6 +34,23 @@ describe('HomePage', () => {
     expect(page.querySelector('.progress-count')?.textContent).toContain('12 / 151');
   });
 
+  it('shows the cards as a list (ul with li)', () => {
+    expect(page.querySelectorAll('ul.grid > li').length).toBe(15);
+  });
+
+  it('shows a table with the cards per rarity', () => {
+    const rows = Array.from(page.querySelectorAll('.rarity tbody tr')).map((row) =>
+      Array.from(row.querySelectorAll('td')).map((cell) => cell.textContent?.trim()),
+    );
+    // [rarity, you own, in packs]
+    expect(rows).toEqual([
+      ['Common', '5', '5'],
+      ['Uncommon', '2', '3'],
+      ['Rare', '3', '4'],
+      ['Ultra rare', '2', '3'],
+    ]);
+  });
+
   it('shows only Fire cards after clicking the Fire tab', async () => {
     const tabs = Array.from(page.querySelectorAll<HTMLButtonElement>('.tab'));
     tabs.find((tab) => tab.textContent?.trim() === 'Fire')!.click();

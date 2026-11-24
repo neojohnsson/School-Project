@@ -391,6 +391,71 @@ Logged out:  [Open packs] [Collection]                              [Log in]
   - 4 new header tests (29 in total, all passing)
   - in a real browser: logged out showed "Log in"; logged in showed "Clear saved data" + "Log out" on both Collection and Open Packs; "Log out" went to the Login page; the phone layout had no sideways scrolling
 
+### Step 11 – Footer (assignment requirement: menu, header, footer, main area)
+
+We checked the app against the assignment (`1ik163_Project.pdf`). The layout must have a menu, a header, a footer and a main area, and we had no footer.
+
+- **New component:** `components/app-footer/`, which shows **"Made by Neo and Kevin"** in small grey text at the bottom.
+- **On every page:** it is added once in `app.html`, under the page (`<router-outlet />`).
+- **No extra scrolling:**
+  - Login and Open Packs fill the whole screen, so they are now made 42px shorter (`--footer-height` in `styles.css`) and the footer fits under them
+  - checked in a browser on laptop and phone: the footer ends exactly at the bottom of the screen
+- **Testing:** 1 new test (30 in total, all passing).
+
+Still missing from the assignment: Firebase (database and users) and a form for adding an item with validation.
+
+### Step 12 – Meeting Assignment 1 and 2 (`1ik163_assignments.pdf`)
+
+We checked the website against Assignment 1 (HTML and CSS) and Assignment 2 (CSS3 and JavaScript) and fixed what was missing.
+The Firebase project (`1ik163_Project.pdf`) is for later.
+
+| Requirement | How the website meets it now |
+|---|---|
+| At least 3 pages, including a home page | Collection (home), Open Packs and Login |
+| Every page has a bitmap image **and** an SVG image | Bitmaps: Pikachu, pack and card pictures (PNG). SVG: the logo `images/logo.svg` in the footer, on every page |
+| One page has a table and a list | Collection: the cards are a list (`<ul>`/`<li>`), plus a table "Your cards by rarity" |
+| Links to the other pages + an external link on every page | The footer links to Collection, Open packs and Log in, plus "Pictures from PokéAPI" (https://pokeapi.co) |
+| Layout only with CSS | CSS grid and flexbox, no tables for layout |
+| HTML5 and CSS3, responsive | `<main>`, `<header>`, `<nav>`, `<footer>`, `<section>`, `<article>`; CSS variables, grid, flexbox and media queries for phones |
+| Login page with a form and a button that checks the password | "Log in" checks the password rule (see below) |
+
+#### What was changed
+
+1. **Footer:**
+   - added the SVG logo (`public/images/logo.svg`)
+   - added links to the three pages and one external link to PokéAPI
+   - on phones the links wrap onto a second line
+2. **Collection page:**
+   - the card grid is now a real list (`<ul>` with one `<li>` per card); it looks exactly the same
+   - a new table "Your cards by rarity" (Rarity | You own | In packs), in the same clean style with only thin lines
+3. **Password check (Assignment 2):**
+   - a new file `src/app/utils/password-check.ts` checks the rule: at least **8 characters**, **2 capital letters**, **1 number** and **1 special character**
+   - when you click "Log in", the page says what is missing, for example *"The password needs at least 2 capital letters."*
+   - with a valid password you are logged in
+   - there is no backend, so **any username with a valid password** works, for example `PasSword123!`
+   - the old fixed account (`user` / base64 `password`) was removed, because "password" breaks the rule
+4. **`<main>`:** the Login and Open Packs pages now use the HTML5 `<main>` tag, like the Collection page.
+
+#### Testing
+
+- 35 tests, all passing. New ones check:
+  - the password rule
+  - the footer links and SVG
+  - the list and the table
+- A browser script went through every page. Every page (also the Open Packs summary step) had a bitmap image, an SVG image, links to the other pages, an external link, `<main>` and the footer.
+- The password messages were tried with 6 passwords:
+  - "short1!" → "at least 8 characters"
+  - "password" and "Password1!" → "2 capital letters"
+  - "PassWord!!" → "1 number"
+  - "PassWord12" → "1 special character"
+  - "PasSword123!" → logged in
+
+#### Good to know
+
+- On phones the Login page hides the Pikachu picture, so its bitmap image only shows on bigger screens.
+- The assignment says "static website using HTML, CSS and JavaScript". Our site is built with Angular, which is HTML, CSS and TypeScript (turned into JavaScript). Check with the teacher that this is OK.
+- Assignment 1 asks for a "presentation website for your group" (ideally one page per member). Our site is about Pokémon cards.
+
 ---
 
 ## 4. Problems we ran into and how we solved them

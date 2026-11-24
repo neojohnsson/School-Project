@@ -30,7 +30,7 @@ describe('authGuard', () => {
   });
 
   it('lets you in when you are logged in', () => {
-    TestBed.inject(AuthService).logIn('user', 'password');
+    TestBed.inject(AuthService).logIn('ash', 'PasSword123!');
     expect(runGuard()).toBe(true);
   });
 });

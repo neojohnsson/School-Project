@@ -97,7 +97,7 @@
 /* On small screens we hide the picture so the form is the only thing you see */
 @media (max-width: 900px) {
   .content {
-    min-height: calc(100vh - 24px);
+    min-height: calc(100vh - 24px - var(--footer-height));
   }
 
   .hero {

@@ -42,20 +42,20 @@ describe('Login', () => {
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
-  it('shows an error for a wrong password', async () => {
-    type('username', 'user');
-    type('password', 'wrong');
+  it('says what is wrong with an invalid password', async () => {
+    type('username', 'ash');
+    type('password', 'password'); // no capitals, no number, no special character
     click('Log in');
     await fixture.whenStable();
 
-    expect(error()).toBe('Wrong username or password.');
+    expect(error()).toBe('The password needs at least 2 capital letters.');
     expect(TestBed.inject(AuthService).isLoggedIn()).toBe(false);
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
-  it('logs in with the right username and password', async () => {
-    type('username', 'user');
-    type('password', 'password');
+  it('logs in with a valid password', async () => {
+    type('username', 'ash');
+    type('password', 'PasSword123!');
     click('Log in');
     await fixture.whenStable();
 

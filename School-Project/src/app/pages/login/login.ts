@@ -1,12 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { passwordProblem } from '../../utils/password-check';
 
 /**
  * Login page (page 1 in Figma): username, password and "Log in".
  *
- * NOTE: there is no backend yet, so there is only one built-in account (see AuthService).
- * Later, call your backend here (for example with Angular's HttpClient).
+ * "Log in" checks that the password is valid (Assignment 2): at least 8 characters,
+ * 2 capital letters, 1 number and 1 special character. There is no backend, so any
+ * username with a valid password logs you in.
  */
 @Component({
   selector: 'app-login',
@@ -34,10 +36,13 @@ export class Login {
       this.message.set('Please fill in your username and password.');
       return;
     }
-    if (!this.auth.logIn(username, password)) {
-      this.message.set('Wrong username or password.');
+    // Check the password rule (Assignment 2) and say what is wrong
+    const problem = passwordProblem(password);
+    if (problem) {
+      this.message.set(problem);
       return;
     }
+    this.auth.logIn(username, password);
     this.message.set('');
     this.router.navigate(['/home']);
   }

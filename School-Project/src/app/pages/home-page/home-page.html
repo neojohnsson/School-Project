@@ -87,21 +87,23 @@
     </div>
   </div>
 
-  <!-- 4. The grid: a card for every owned Pokémon, a dashed box for missing ones -->
-  <section class="grid">
+  <!-- 4. The grid is a LIST (<ul>): a card for every owned Pokémon, a dashed box for missing ones -->
+  <ul class="grid">
     @for (slot of shownSlots(); track slot.number) {
-      @if (slot.card; as card) {
-        <app-pokemon-card [card]="card" />
-      } @else {
-        <div class="empty-slot">
-          <span class="empty-number">{{ formatNumber(slot.number) }}</span>
-          <span class="empty-caption">Not collected yet</span>
-        </div>
-      }
+      <li>
+        @if (slot.card; as card) {
+          <app-pokemon-card [card]="card" />
+        } @else {
+          <div class="empty-slot">
+            <span class="empty-number">{{ formatNumber(slot.number) }}</span>
+            <span class="empty-caption">Not collected yet</span>
+          </div>
+        }
+      </li>
     } @empty {
-      <p class="no-results">No cards match your search.</p>
+      <li class="no-results">No cards match your search.</li>
     }
-  </section>
+  </ul>
 
   <!-- 5. Counter + "Load more" (the button only shows if there are more cards) -->
   <footer class="load-more">
@@ -110,4 +112,27 @@
       <button type="button" class="btn btn-secondary" (click)="loadMore()">Load more</button>
     }
   </footer>
+
+  <!-- 6. A TABLE: how many cards of each rarity you have -->
+  <section class="rarity">
+    <h2 class="rarity-title">Your cards by rarity</h2>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Rarity</th>
+          <th scope="col">You own</th>
+          <th scope="col">In packs</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rarityRows(); track row.rarity) {
+          <tr>
+            <td>{{ row.rarity }}</td>
+            <td>{{ row.owned }}</td>
+            <td>{{ row.total }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
 </main>
