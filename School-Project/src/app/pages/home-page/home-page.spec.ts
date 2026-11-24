@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
+import { MemoryStorage } from '../../../testing/memory-storage';
 import { HomePage } from './home-page';
 
 describe('HomePage', () => {
@@ -8,6 +9,8 @@ describe('HomePage', () => {
   let page: HTMLElement;
 
   beforeEach(async () => {
+    // A fresh, empty storage, so the page shows the starter collection
+    vi.stubGlobal('localStorage', new MemoryStorage());
     await TestBed.configureTestingModule({
       imports: [HomePage],
       providers: [provideRouter([])], // the header uses routerLink, which needs a router

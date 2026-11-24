@@ -4,22 +4,39 @@
  * catch mistakes, like writing 'Fyre' instead of 'Fire'.
  */
 
-/** Pokémon types. Each one (except Ghost) is a filter tab on the Collection page. */
-export type PokemonType = 'Grass' | 'Fire' | 'Water' | 'Electric' | 'Psychic' | 'Normal' | 'Ghost';
+/** Pokémon types. Some of them are filter tabs on the Collection page. */
+export type PokemonType =
+  | 'Grass'
+  | 'Fire'
+  | 'Water'
+  | 'Electric'
+  | 'Psychic'
+  | 'Normal'
+  | 'Ghost'
+  | 'Bug'
+  | 'Fighting'
+  | 'Dragon';
 
 /** How rare a card is. Every step up adds one black diamond on the card. */
 export type Rarity = 'Common' | 'Uncommon' | 'Rare' | 'Ultra rare';
 
-/** One card the player owns. */
-export interface Card {
+/** The facts printed on a card. They are the same for every player. */
+export interface PokemonInfo {
   number: number; // Pokédex number, e.g. 25 for Pikachu
   name: string;
   type: PokemonType;
   hp: number;
   rarity: Rarity;
+}
+
+/** What one player has of a card. */
+export interface Owned {
   copies: number; // how many of this card the player has (shows "×3")
   isNew: boolean; // true if it came from the latest pack (shows "NEW")
 }
+
+/** A card the player owns = the card facts + how many they have. */
+export interface Card extends PokemonInfo, Owned {}
 
 /** One spot in the collection grid: a card you own, or an empty spot (card is null). */
 export interface CollectionSlot {

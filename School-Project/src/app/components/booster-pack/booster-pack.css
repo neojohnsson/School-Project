@@ -1,0 +1,236 @@
+/*
+ * The pack is 280 × 430 like in Figma.
+ * It is built from two parts: .top (the strip you tear off, 56px) and .body (the rest).
+ */
+.pack {
+  --white-60: rgb(255 255 255 / 60%);
+  position: relative;
+  width: 280px;
+  height: 430px;
+  filter: drop-shadow(0 24px 40px rgb(20 20 20 / 22%));
+  user-select: none;
+}
+
+/* ---------- Top strip ---------- */
+.top {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  height: 56px;
+  background: linear-gradient(#0000 18px, var(--bg-inverse) 18px);
+  /* While dragging, the left end lifts a little (turns around the right corner) */
+  transform-origin: right bottom;
+  transform: rotate(calc(var(--tear) * 5deg));
+}
+
+.crimp {
+  height: 18px;
+  background: url('/images/crimp.svg') center / 100% 100%;
+}
+
+.tear-label {
+  position: absolute;
+  top: 36px;
+  right: 20px;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--white-60);
+}
+
+/* ---------- Body ---------- */
+.body {
+  position: absolute;
+  inset: 56px 0 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 20px 0;
+  background: linear-gradient(var(--bg-inverse) 356px, #0000 356px);
+  color: var(--text-inverse);
+}
+
+/* The dotted tear line (4px dash, 4px gap) */
+.body::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, var(--white-60) 0 4px, #0000 4px 8px);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.kind {
+  font-weight: 500;
+}
+
+.small {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--white-60);
+}
+
+.artwork {
+  display: block;
+  width: 240px;
+  height: 216px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.crimp-bottom {
+  position: absolute;
+  inset: auto 0 0;
+  transform: scaleY(-1); /* the same zigzag, upside down */
+}
+
+/* ---------- Cards inside ---------- */
+.inside-card {
+  position: absolute;
+  top: 56px;
+  left: 24px;
+  width: 232px;
+  height: 325px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-surface);
+  transition: transform 0.6s 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ---------- Opened ---------- */
+/* The strip flies up and the dotted line becomes a torn white edge */
+.open .top {
+  transform: translate(19px, -73px) rotate(-9deg);
+  transition: transform 0.45s ease-out;
+}
+
+.open .body::before {
+  height: 5px;
+  background: var(--bg-surface);
+}
+
+/* The two cards slide up out of the pack */
+.open .inside-card-1 {
+  transform: translate(-4px, -51px) rotate(3deg);
+}
+
+.open .inside-card-2 {
+  transform: translate(12px, -52px) rotate(-2deg);
+}
+
+/* ---------- Hint and swipe animation ---------- */
+.hint {
+  position: absolute;
+  bottom: calc(100% + 27px);
+  left: 50%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-surface);
+  font-size: 13px;
+  line-height: 18px;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.swipe {
+  position: absolute;
+  top: 41px;
+  left: 1px;
+  z-index: 3;
+  width: 256px;
+  height: 30px;
+  pointer-events: none;
+}
+
+.ring,
+.point {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.ring {
+  inset: 0 auto auto 0;
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid var(--text-inverse);
+}
+
+/* The white dot slides along the line again and again */
+.point {
+  top: 9px;
+  left: 9px;
+  width: 12px;
+  height: 12px;
+  background: var(--text-inverse);
+  animation: swipe 1.8s ease-in-out infinite;
+}
+
+.line {
+  position: absolute;
+  top: 14px;
+  left: 37px;
+  right: 0;
+  height: 1.5px;
+  background: var(--text-inverse);
+}
+
+/* Arrow head at the end of the line */
+.line::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  border-top: 1.5px solid var(--text-inverse);
+  border-right: 1.5px solid var(--text-inverse);
+  transform: rotate(45deg);
+}
+
+@keyframes swipe {
+  0%,
+  15% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  75% {
+    transform: translateX(225px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(225px);
+    opacity: 0;
+  }
+}
+
+/* The area you drag on: a bit bigger than the dotted line so it is easy to hit */
+.tear-zone {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  height: 72px;
+  cursor: ew-resize;
+  touch-action: none; /* on phones: dragging tears the pack instead of scrolling the page */
+}

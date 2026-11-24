@@ -1,1 +1,61 @@
-<p>login works!</p>
+<div class="split">
+  <!-- Left half: the form -->
+  <section class="split-content content">
+    <!-- #username and #password give the inputs a name, so we can send their values -->
+    <form class="login" (submit)="logIn($event, username.value, password.value)">
+      <h1 class="display">Welcome back</h1>
+
+      <div class="fields">
+        <div class="field">
+          <label class="label" for="username">Username</label>
+          <div class="input-row">
+            <input
+              #username
+              id="username"
+              name="username"
+              autocomplete="username"
+              placeholder="e.g. ash_ketchum"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="password">Password</label>
+          <div class="input-row">
+            <input
+              #password
+              id="password"
+              name="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              autocomplete="current-password"
+              placeholder="Enter your password"
+            />
+            <button type="button" class="toggle" (click)="togglePassword()">
+              {{ showPassword() ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+        </div>
+
+        @if (error()) {
+          <p class="error" role="alert">{{ error() }}</p>
+        }
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary">Log in</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="createAccount(username.value, password.value)"
+        >
+          Create account
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Right half: the pixel-art Pikachu (only decoration, so alt="") -->
+  <div class="split-panel hero">
+    <img src="images/hero-pikachu.png" alt="" />
+  </div>
+</div>

@@ -1,1 +1,137 @@
-<p>open-packs works!</p>
+<div class="split">
+  <!-- ===== Left half: header + text + buttons ===== -->
+  <section class="split-content">
+    <app-header />
+
+    <div class="main">
+      @switch (phase()) {
+        <!-- 2.1 Sealed and 2.2 Tearing -->
+        @case ('pack') {
+          @if (tearProgress() === 0) {
+            <div>
+              <h1 class="display">Open a pack</h1>
+              <p class="lead">Drag across the top of the pack to tear it open.</p>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn btn-primary" (click)="autoTear()">Open pack</button>
+              <button type="button" class="btn btn-secondary" (click)="skip()">
+                Skip animation
+              </button>
+            </div>
+          } @else {
+            <div>
+              <h1 class="display">Keep pulling</h1>
+              <p class="lead">Keep dragging, your cards are sliding out.</p>
+            </div>
+            <div class="progress">
+              <div class="progress-row">
+                <span>Tearing</span>
+                <span class="progress-value">{{ tearPercent() }}%</span>
+              </div>
+              <div class="track"><div class="bar" [style.width.%]="tearPercent()"></div></div>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn btn-secondary" (click)="skip()">
+                Skip animation
+              </button>
+            </div>
+          }
+        }
+
+        <!-- 2.3 Reveal, one card at a time -->
+        @case ('reveal') {
+          <div>
+            <h1 class="display">{{ current().name }}</h1>
+            <p class="lead">
+              Card {{ revealIndex() + 1 }} of {{ pulled().length }}. {{ revealMessage() }}
+            </p>
+          </div>
+          <div class="segments" aria-hidden="true">
+            @for (segment of segments; track segment) {
+              <span class="segment" [class.done]="segment <= revealIndex()"></span>
+            }
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" (click)="next()">
+              {{ isLastCard() ? 'See all cards' : 'Next card' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="revealAll()">
+              Reveal all
+            </button>
+          </div>
+        }
+
+        <!-- 2.4 Summary -->
+        @case ('summary') {
+          <div>
+            <h1 class="display">Pack opened</h1>
+            <p class="lead">{{ summaryText() }}</p>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" (click)="openNextPack()">
+              Open next pack
+            </button>
+            <a class="btn btn-secondary" routerLink="/home">View collection</a>
+          </div>
+        }
+      }
+    </div>
+  </section>
+
+  <!-- ===== Right half: the grey stage with the pack or the cards ===== -->
+  <section class="split-panel stage">
+    @switch (phase()) {
+      @case ('pack') {
+        <!-- [(progress)] = two-way: the pack and this page share tearProgress -->
+        <app-booster-pack [(progress)]="tearProgress" (opened)="open()" />
+      }
+
+      @case ('reveal') {
+        <div class="reveal">
+          <!-- The face-down pile behind, while there are still cards left -->
+          @if (!isLastCard()) {
+            <div class="card-back" aria-hidden="true">
+              <div class="card-back-inner">
+                <svg width="45" height="45" viewBox="0 0 28 28" fill="none">
+                  <rect
+                    x="2.9"
+                    y="6.9"
+                    width="12.2"
+                    height="17.2"
+                    rx="2.4"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  />
+                  <rect x="11" y="3" width="14" height="19" rx="2.6" fill="currentColor" />
+                </svg>
+                <div class="card-back-text">
+                  <strong>PackVault</strong>
+                  <span>SERIES 01</span>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- "track revealIndex()" makes Angular build a new card every time,
+               so the flip animation plays again for each card. -->
+          @for (card of [current()]; track revealIndex()) {
+            <app-pokemon-card class="reveal-card" [card]="card" (click)="next()" />
+          }
+        </div>
+      }
+
+      @case ('summary') {
+        <div class="fan">
+          @for (item of fan(); track $index) {
+            <app-pokemon-card
+              class="fan-card"
+              [card]="item.card"
+              [style.transform]="item.transform"
+              [style.z-index]="item.zIndex"
+            />
+          }
+        </div>
+      }
+    }
+  </section>
+</div>

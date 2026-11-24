@@ -1,0 +1,176 @@
+/*
+ * Left half: the text block sits in the middle of the space under the header
+ * (Figma: 548px wide, 48px between the parts).
+ */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 48px;
+  max-width: 548px;
+  padding-bottom: 44px; /* same height as the header, so the text is in the true middle */
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* "Tearing ... 80%" + a thin line */
+.progress-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--text-secondary);
+}
+
+.progress-value {
+  color: var(--text-primary);
+}
+
+.track {
+  height: 2px;
+  background: var(--border);
+}
+
+.bar {
+  height: 100%;
+  background: var(--text-primary);
+}
+
+/* 5 small lines: one per card, black when you have seen it */
+.segments {
+  display: flex;
+  gap: 6px;
+}
+
+.segment {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  transition: background-color 0.3s;
+}
+
+.segment.done {
+  background: var(--text-primary);
+}
+
+/* ---------- Right half: the grey stage ---------- */
+.stage {
+  display: grid;
+  place-items: center;
+  min-height: 640px;
+}
+
+/* Reveal: the card is shown 1.5× bigger, like in Figma */
+.reveal,
+.fan {
+  position: relative;
+  width: 232px;
+  height: 325px;
+}
+
+.reveal {
+  perspective: 1200px;
+}
+
+.reveal-card,
+.card-back,
+.fan-card {
+  position: absolute;
+  inset: 0;
+}
+
+.reveal-card {
+  z-index: 1;
+  transform: scale(1.5);
+  cursor: pointer;
+  animation: flip-in 0.5s ease-out;
+}
+
+/* Each new card turns over from its side */
+@keyframes flip-in {
+  from {
+    transform: scale(1.5) rotateY(-90deg);
+  }
+}
+
+/* The black back of the next card, a bit turned and to the right */
+.card-back {
+  display: flex;
+  padding: 8px;
+  border-radius: 14px;
+  background: var(--bg-inverse);
+  box-shadow: 0 10px 24px rgb(20 20 20 / 12%);
+  color: var(--text-inverse);
+  transform: translate(62px, 2px) rotate(7deg) scale(1.5);
+}
+
+.card-back-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 9px;
+}
+
+.card-back-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.card-back-text strong {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.card-back-text span {
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgb(255 255 255 / 60%);
+}
+
+/* Summary: the cards start stacked in the middle and spread out to their place */
+.fan-card {
+  animation: fan-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes fan-in {
+  from {
+    transform: scale(0.82);
+  }
+}
+
+/* Phones: the stage goes under the text and everything is a bit smaller */
+@media (max-width: 900px) {
+  .main {
+    padding: 48px 0 8px;
+  }
+
+  .stage {
+    min-height: 600px;
+    padding-top: 64px; /* room for the hint above the pack */
+  }
+
+  .reveal {
+    scale: 0.62;
+  }
+
+  /* the fan is wider than one card, so it needs to be a bit smaller to fit */
+  .fan {
+    scale: 0.52;
+  }
+}

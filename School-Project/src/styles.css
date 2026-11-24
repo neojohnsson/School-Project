@@ -56,6 +56,13 @@ select {
   letter-spacing: -0.03em;
 }
 
+/* The short line of text under a page title */
+.lead {
+  margin: 20px 0 0;
+  font-size: 17px;
+  line-height: 26px;
+}
+
 /* 4. Buttons: <button class="btn btn-primary"> (black) or "btn btn-secondary" (outlined) */
 .btn {
   display: inline-flex;
@@ -68,6 +75,7 @@ select {
   font-size: 15px;
   line-height: 20px;
   font-weight: 500;
+  text-decoration: none; /* also for links that look like buttons (<a class="btn">) */
   cursor: pointer;
   transition: background-color 0.15s;
 }
@@ -88,6 +96,42 @@ select {
 
 .btn-secondary:hover {
   background: var(--bg-subtle);
+}
+
+/*
+ * 5. Split layout (Login and Open Packs): content on the left, a big rounded panel on the right.
+ *    From Figma: 12px around the edge and between the halves, panel corners 18px.
+ */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  min-height: 100vh;
+  padding: 12px;
+}
+
+.split-content {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 64px 34px 92px;
+}
+
+.split-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--bg-subtle);
+}
+
+/* On tablets and phones the two halves go under each other */
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+
+  .split-content {
+    padding: 24px 16px 40px;
+  }
 }
 
 /* Smaller title on phones */

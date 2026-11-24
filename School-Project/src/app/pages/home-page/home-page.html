@@ -1,12 +1,6 @@
 <main class="page">
-  <!-- 1. Header: navigation pills + profile circle -->
-  <header class="header">
-    <nav class="nav">
-      <a class="nav-item" routerLink="/open-packs" routerLinkActive="active">Open packs</a>
-      <a class="nav-item" routerLink="/home" routerLinkActive="active">Collection</a>
-      <span class="avatar" title="Your profile">A</span>
-    </nav>
-  </header>
+  <!-- 1. Header: navigation pills + profile circle (shared component) -->
+  <app-header />
 
   <!-- 2. Title on the left, "12 / 151 collected" on the right -->
   <section class="intro">

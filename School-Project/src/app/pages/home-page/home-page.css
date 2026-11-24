@@ -9,52 +9,7 @@
   padding: 42px 92px 72px;
 }
 
-/* ---------- 1. Header ---------- */
-.header {
-  display: flex;
-  align-items: center;
-  height: 48px;
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.nav-item {
-  display: inline-flex;
-  align-items: center;
-  height: 38px;
-  padding: 0 16px;
-  border: 1px solid var(--text-primary);
-  border-radius: 9px;
-  font-weight: 500;
-  line-height: 20px;
-  color: var(--text-primary);
-  text-decoration: none;
-  transition: background-color 0.15s;
-}
-
-.nav-item:hover {
-  background: var(--bg-subtle);
-}
-
-/* routerLinkActive adds the "active" class to the link of the page you are on */
-.nav-item.active {
-  background: var(--bg-inverse);
-  color: var(--text-inverse);
-}
-
-.avatar {
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--bg-subtle);
-  font-weight: 500;
-}
+/* (1. The header has its own component: components/app-header) */
 
 /* ---------- 2. Title + progress ---------- */
 .intro {
@@ -64,12 +19,6 @@
   align-items: flex-end;
   gap: 32px;
   margin-top: 88px;
-}
-
-.lead {
-  margin: 20px 0 0;
-  font-size: 17px;
-  line-height: 26px;
 }
 
 .progress {

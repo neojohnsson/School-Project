@@ -1,0 +1,106 @@
+/* The form sits in the middle of the left half (Figma: 460px wide, 60px between the parts) */
+.content {
+  justify-content: center;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  width: 100%;
+  max-width: 460px;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  line-height: 20px;
+}
+
+/* Underline-style input: only a thin line under the text */
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  transition: border-color 0.15s;
+}
+
+/* While you type, the line turns black (the "Focused" state in Figma) */
+.input-row:focus-within {
+  border-bottom-color: var(--text-primary);
+  box-shadow: 0 0.5px 0 var(--text-primary);
+}
+
+.input-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  font-size: 17px;
+  line-height: 26px;
+}
+
+.input-row input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* "Show" / "Hide" for the password */
+.toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.toggle:hover {
+  color: var(--text-primary);
+}
+
+.error {
+  margin: -8px 0 0;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* The picture fills the whole rounded panel */
+.hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* On small screens we hide the picture so the form is the only thing you see */
+@media (max-width: 900px) {
+  .content {
+    min-height: calc(100vh - 24px);
+  }
+
+  .hero {
+    display: none;
+  }
+}

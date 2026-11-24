@@ -1,8 +1,9 @@
-import { Component, computed, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, computed, inject, signal } from '@angular/core';
+import { AppHeader } from '../../components/app-header/app-header';
 import { PokemonCard } from '../../components/pokemon-card/pokemon-card';
-import { SAMPLE_COLLECTION, SET_SIZE } from '../../data/sample-collection';
+import { SET_SIZE } from '../../data/card-set';
 import { CollectionSlot, PokemonType, formatNumber } from '../../models/card';
+import { CollectionService } from '../../services/collection.service';
 
 type TypeFilter = 'All' | PokemonType;
 type SortOption = 'number' | 'name';
@@ -17,14 +18,16 @@ const PAGE_SIZE = 15;
 @Component({
   selector: 'app-home-page',
   // Everything the template uses must be imported here:
-  // RouterLink/RouterLinkActive for the header links, PokemonCard for <app-pokemon-card>.
-  imports: [RouterLink, RouterLinkActive, PokemonCard],
+  // AppHeader for <app-header>, PokemonCard for <app-pokemon-card>.
+  imports: [AppHeader, PokemonCard],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css',
 })
 export class HomePage {
   // ---------- Data ----------
-  protected readonly slots = SAMPLE_COLLECTION;
+  // The collection is shared with the Open Packs page, so new cards show up here.
+  private readonly collection = inject(CollectionService);
+  protected readonly slots = this.collection.slots;
   protected readonly setSize = SET_SIZE;
   protected readonly tabs: TypeFilter[] = [
     'All',
@@ -46,7 +49,7 @@ export class HomePage {
 
   // ---------- Values calculated from the state ----------
   // computed() recalculates only when a signal it reads changes.
-  protected readonly ownedCount = computed(() => this.slots.filter((slot) => slot.card).length);
+  protected readonly ownedCount = this.collection.ownedCount;
   protected readonly progress = computed(() => (this.ownedCount() / this.setSize) * 100);
 
   /** The slots that match the active tab + search, in the chosen order. */
@@ -55,7 +58,7 @@ export class HomePage {
     const query = this.search().trim().toLowerCase();
     const isFiltering = type !== 'All' || query !== '';
 
-    const result = this.slots.filter((slot) => {
+    const result = this.slots().filter((slot) => {
       // Empty spots have no name or type, so only show them when nothing is filtered.
       if (!slot.card) return !isFiltering;
       const matchesType = type === 'All' || slot.card.type === type;

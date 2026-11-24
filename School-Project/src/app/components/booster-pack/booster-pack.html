@@ -1,0 +1,63 @@
+<!-- --tear (0 to 1) is used in the CSS to lift the top strip while you drag -->
+<div class="pack" [class.open]="isOpen()" [style.--tear]="progress()">
+  <!-- Hint above the pack, only before you start tearing -->
+  @if (progress() === 0) {
+    <div class="hint">
+      Drag across the dotted line
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <path
+          d="M3.75 9h10.5M10 4.75L14.25 9 10 13.25"
+          stroke="currentColor"
+          stroke-width="1.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+  }
+
+  <!-- Two cards hidden inside the pack: they slide out when it opens -->
+  <div class="inside-card inside-card-1"></div>
+  <div class="inside-card inside-card-2"></div>
+
+  <!-- Top strip: this is the part you tear off -->
+  <div class="top">
+    <div class="crimp"></div>
+    <span class="tear-label">TEAR HERE</span>
+  </div>
+
+  <!-- The rest of the pack -->
+  <div class="body">
+    <div class="text">
+      <strong class="title">PackVault</strong>
+      <span class="small">Series 01 · Kanto</span>
+    </div>
+    <img class="artwork" src="images/pack-charizard.png" alt="Charizard" />
+    <div class="text">
+      <strong class="title kind">Booster Pack</strong>
+      <span class="small">5 cards · 1 rare or better</span>
+    </div>
+    <div class="crimp crimp-bottom"></div>
+  </div>
+
+  @if (!isOpen()) {
+    <!-- Animated finger that shows how to tear (only before you start) -->
+    @if (progress() === 0) {
+      <div class="swipe" aria-hidden="true">
+        <span class="ring"></span>
+        <span class="point"></span>
+        <span class="line"></span>
+      </div>
+    }
+
+    <!-- Invisible area over the dotted line where you drag. #zone lets us read its width. -->
+    <div
+      #zone
+      class="tear-zone"
+      (pointerdown)="startTear($event)"
+      (pointermove)="moveTear($event, zone.offsetWidth)"
+      (pointerup)="endTear()"
+      (pointercancel)="endTear()"
+    ></div>
+  }
+</div>
